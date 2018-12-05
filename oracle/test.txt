@@ -1,0 +1,21 @@
+SQL> connect
+Enter user-name: hr
+Connected.
+SQL> creat table dhaka(id number(15) primary key, name varchar2(100) not null, mobile char(11), email varchar2(50) unique, income number(11,2) check (income >1999) not null, regi_date date default sysdate, country varchar2(50) default 'Bangladesh');
+SP2-0734: unknown command beginning "creat tabl..." - rest of line ignored.
+SQL> create table dhaka(id number(15) primary key, name varchar2(100) not null, mobile char(11), email varchar2(50) unique, income number(11,2) check (income > 1999) not null, regi_date date default sysdate, country varchar2(50) default 'Bangladesh');
+
+Table created.
+
+SQL> desc dhaka;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                        NOT NULL NUMBER(15)
+ NAME                                      NOT NULL VARCHAR2(100)
+ MOBILE                                             CHAR(11)
+ EMAIL                                              VARCHAR2(50)
+ INCOME                                    NOT NULL NUMBER(11,2)
+ REGI_DATE                                          DATE
+ COUNTRY                                            VARCHAR2(50)
+
+SQL> spool off;
