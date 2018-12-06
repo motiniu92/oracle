@@ -1,0 +1,75 @@
+#mainDiv{
+    width: 100%;
+    height: auto;
+}
+.row{
+    width: 100%;
+    height: auto;
+}
+
+.col-lg{
+    width: 25%;
+    height: auto;
+    float: left;
+}
+.col-md{
+    width: 50%;
+    height: auto;
+    float: left;
+}
+.col-sm{
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
+@media screen and (min-width: 769px){
+    .col-lg{
+        width: 25%;
+        height: auto;
+        float: left;
+        color: red;
+        font-size: 30px;
+    }
+}
+
+@media screen and (max-width: 769px){
+    .col-md{
+        width: 50%;
+        height: auto;
+        float: left;
+        color: blue;
+        font-size: 25px;
+    }
+}
+
+@media screen and (max-width: 468px){
+    .col-sm{
+        width: 100%;
+        height: auto;
+        float: left;
+        color: green;
+        font-size: 25px;
+    }
+}
+
+
+
+.blue{
+    background: blue;
+}
+.red{
+    background: red;
+}
+.green{
+    background: green;
+}
+.orange{
+    background: orange;
+}
+.yellow{
+    background: yellow;
+}
+.magenta{
+    background: magenta;
+}
