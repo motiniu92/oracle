@@ -1,0 +1,156 @@
+=====Create table=====
+ create table customer (id number(6), name varchar2(50), age number(4),
+      address varchar2(50), salary number(8,2));
+
+
+=====Add primary key=====
+ alter table customer add constraint cus_id_pk primary key (id);
+
+
+=====Add column=====
+ alter table customer add (phone number(11), job_title varchar2(40));
+
+=====insert data=====
+ insert into customer(id, name, age, address, salary, phone, job_title)
+   values(01, 'motin', 27, 'dhaka', 01740197705, 'programmer');
+
+
+=====insert multiple data=====
+ insert into customer(id, name, age, address, salary, phone, job_title)
+   values(02, 'robin', 22, 'palton', 01740197802, 'worker'),
+     (03, 'salam', 29, 'savar', 01740297809, 'worker'),
+     (04, 'kalam', 19, 'mirpur', 01940197842, 'worker'),
+     (05, 'sobuj', 24, 'gulshan', 01740197853, 'worker');
+
+
+=====bonus 30%=====
+ select name,job_title, salary, salary+(salary*.30) as review_salary from customer;
+
+
+=====Max salary=====
+ select name salary from customer where salary=(select Max(salary)from customer);
+
+
+=====update job_title to manager=====
+ update customer set job_title='manager';
+
+
+=====create view=====
+ create view v_customer as select name, job_title, salary+(salary*.30) as 
+    review_salary from customer;
+
+
+=====create sequence=====
+create sequence id_seq, increment by 1 start with with 6 maxvalue 100000
+      nocache nocycle;
+
+
+=====create index=====
+ create index cus_id_idx On customer(eid);
+
+
+=====create synonym======
+ create synonym cus_syn for customer;
+
+
+======create backup table=====
+ create table customer_backup as select * from customer;
+
+
+=====create trigger=====
+ CREATE OR REPLACE TRIGGER customer_trigger_after AFTER insert ON customer
+ FOR EACH ROW
+ DECLARE
+ BEGIN
+ insert into customer_backup values(:new.id, :new.name, :new.age, :new.address,
+ :new.salary, :new.phone, :new.job_title);
+ dbms_output.put_line('Data inserted successfolly into customer_backup table');
+ END;
+ / 
+
+
+=====update trigger=====
+ CREATE OR REPLACE TRIGGER customer_trigger_update AFTER update ON customer
+ FOR EACH ROW
+ DECLARE
+ BEGIN
+ update customer_backup
+ set id =:new.id, name = :new.name, age = :new.age, address = :new.address,
+ salary = :new.salary, phone = :new.phone, job_title = :new.job_title)
+ where id = :old.id or name = :old.name or salary = :old.salary;
+ dbms_output.put_line('Data inserted successfolly into customer_backup table');
+ END;
+ /  
+
+=====delete trigger=====
+ CREATE OR REPLACE TRIGGER customer_trigger_delete AFTER delete ON customer
+ FOR EACH ROW
+ DECLARE
+ BEGIN
+ delete customer_backup
+ where id = :old.id or name = :name or salary = :old.salary;
+ dbms_output.put_line('Data deleted successfully from customer_backup table');
+ END;
+ /
+
+=====create procedure=====
+ CREATE OR REPLACE PROCEDURE insertCustomer(
+    p_id IN CUSTOMER.id%TYPE,
+    p_name IN CUSTOMER.name%TYPE,
+    p_age IN CUSTOMER.age%TYPE,
+    p_address IN CUSTOMER.address%TYPE)
+    IS
+    BEGIN
+    INSERT INTO CUSTOMER (id, name, age, address)
+    values (p_id, p_name, p_age, p_address);
+    commit;
+    END;
+    /
+
+====call====
+  BEGIN
+   insertCustomer(1, 'A', '25','BD');
+   END;
+   /
+
+
+=====update procedure=====
+ CREATE OR REPLACE PROCEDURE updateCustomer(
+    p_id IN CUSTOMER.id%TYPE,
+    p_name IN CUSTOMER.name%TYPE,
+    p_age IN CUSTOMER.age%TYPE,
+    p_address IN CUSTOMER.address%TYPE)
+    IS
+    BEGIN
+    update customer set (id, name, age, address)
+    values (p_id, p_name, p_age, p_address);
+    commit;
+    END;
+    /
+
+====call====
+  BEGIN
+   updateCustomer(1, 'B', '22','USA');
+   END;
+   /
+
+
+
+=====delete procedure=====
+ CREATE OR REPLACE PROCEDURE deleteCustomer(
+    p_id IN CUSTOMER.id%TYPE,
+    IS
+    BEGIN
+    delete from customer where id=p_id;
+    commit;
+    END;
+    /
+
+====call====
+  BEGIN
+   deleteCustomer(1);
+   END;
+   /
+
+====show data=====
+select * from customer;
