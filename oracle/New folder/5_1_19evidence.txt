@@ -1,0 +1,159 @@
+connect sys as sysdba
+enter password:
+
+create user newyear identified by newyear;
+grant dba to newyear;
+grant all privileges to newyear;
+grant unlimited tablespace to newyear;
+
+ connect newyear
+ enter password:
+
+          ===table===
+create table category(id number(6), cname varchar2(50));
+
+alter table category add constraint cat_id_pk primary key(id);
+alter table category add constraint cat_id_uni unique(name);
+insert into category(id, c
+name) values(5, 'AAA');
+
+create table employee (id number(5) primary key, name varchar2(50) not null,
+  salary number(8,2) check(salary>=25000), cat_id number(6), country varchar2(50)
+  default 'Bangladesh', foreign key(cat_id) references category(id));
+
+insert into employee(id, name, salary, cat_id, country) values(101, 'YYY', 30000, 5, 'default');
+
+           
+      ===sequence===
+create sequence cat_seq increment by 5 start with 10 nocache nocycle;
+create sequence emp_seq increment by 1 start with 102 nocache nocycle;
+
+
+        ===procedure===
+create or replace procedure insertCategory(
+ p_id in category.id%type,
+ p_cname in category.cname%type)
+is
+begin
+insert into category(id, cname)
+values(p_id, p_cname);
+commit;
+end;
+/
+
+begin
+insertCategory(cat_seq.nextval, 'motin');
+end;
+/
+
+
+
+   ===update===
+create or replace procedure updateCategory(
+ p_id in category.id%type,
+ p_cname in category.cname%type)
+is
+begin
+update category set id= p_id, cname= p_cname
+where id = p_id or cname=  p_cname;
+commit;
+end;
+/
+
+begin
+updateCategory(cat_seq.nextval, 'mahin');
+end;
+/
+
+
+
+      ===delete===
+create or replace procedure deleteCategory(
+ p_id in category.id%type)
+is
+begin
+delete from category where id = p_id or cname=  p_cname;
+commit;
+end;
+/
+
+begin
+deleteCategory(cat_seq.nextval, 'mahin');
+end;
+/
+
+
+
+             ===trigger===
+create table emp_backup as select * from employee;
+
+create or replace trigger emp_trigger_after after insert on employee
+ for each row
+ declare
+ begin
+ insert into emp_backup values(:new.id, :new.name, :new.salary, :new.cat_id, :new.country);
+dbms_output.put_line('Data inserted successfully');
+end;
+/
+
+insert into employee(id, name, salary, cat_catgory, country) values(emp_seq.nextval, 'uuu', 20000, 5, 'xy');
+ select * from emp_backup;
+
+
+
+
+
+             ===update===
+create or replace trigger emp_trigger_update after insert on employee
+ for each row
+ declare
+ begin
+ update emp_backup 
+set id=:new.id, name=:new.name, salary=:new.salary, cat_id=:new.cat_id, country=:new.country
+where id=old.id or name=:old.name or salary=:old.salary;
+dbms_output.put_line('Data updated successfully');
+end;
+/ 
+
+update employee set name= 'bbb' wherw id =102;
+update employee set id = 102 where name= 'bbb';
+
+
+              ===delete===
+create or replace trigger emp_trigger_delete after insert on employee
+ for each row
+ declare
+ begin
+ delete from emp_backup 
+where id=old.id or name=:old.name or salary=:old.salary;
+dbms_output.put_line('Data deleted successfully');
+end;
+/ 
+
+delete from emp_backup where salary = 20000;
+delete from emp_backup where id = 102;
+
+
+     ===view,synonym,index=== 
+create or replace view emp_cat_view as select e.id,
+  e.name, e.salary*12 "annual salary", e.country, c.cname "category name"
+  from employee e, category c
+  where e.cat_id=c.id;
+
+create or replace synonym enter for emp_cat_view;
+ 
+create index emp_idx on employee(id, salary, country,)
+
+
+
+
+
+
+
+
+
+
+
+
+
+

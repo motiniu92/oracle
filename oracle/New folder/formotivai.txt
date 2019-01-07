@@ -1,0 +1,19 @@
+=================================procedure===========================
+===========================	CREATE TABLE 	========================
+create table matberchar (id number(6),name varchar(20),mobile varchar(11),gender varchar(20));
+======================create procedure============================
+create or replace procedure matpro (id1 in number, name1 in varchar, mobile1 in varchar, gender1 in varchar)
+is 
+begin
+insert into matberchar values (id1, name1,mobile1,gender1);
+end;
+==========================procedure call========================
+begin 
+matpro (101,'Arif','01922901221','male');
+end;
+
+begin 
+matpro (102,'Arifa','01922901223','female');
+end;
+=================================================================
+select  * from matberchar;
