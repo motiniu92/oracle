@@ -1,0 +1,15 @@
+Quiz-2:
+
+1.	Create a table with eid, ename, salary, hire_date and address columns.
+2.	Set primary key on eid.
+3.	Insert five record using substitution variables.
+4.	Add two columns named as phone, job_title.
+5.	Make a query with ename, job_title, salary and salary with 30% bonus.
+6.	Make a query with ename, salary where salary is equal to minimum salary of 
+7.	employees.
+8.	Update all job_title to manager.
+9.	Create a view.
+10.	Create a sequence increment by 1
+11.	Create an index. On emp(eid)
+12.	Create trigger for insert, update , delete on the above table.
+13.	Insert 3 datas, update 1 data and delete 1 data.

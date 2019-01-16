@@ -1,0 +1,143 @@
+
+======Quiz-2:======
+0. create user user100 and give grant dba, then connect and start 
+working
+Ans. conect sys as sysdba
+password: sys
+create user user100 identified by user100;
+grant dba to user100;
+
+1. Create table named department and employee.
+ A. department: id PK, dep_name Unique
+ C. employee: id, name, salary (starting salary more than 25000),
+ joining_date (Before 2000), department_id FK Not null 
+2. create 3 sequences for each table.
+	A. department sequence should be incremented by 10 and start 
+	with 10. 
+	B. employee sequence should be incremented by 1.	
+3. Create Trigger on employee table for insert, update and delete
+4. Insert, update and delete data using procedure
+5. create a view for employee table to display the following data:
+emp ID, emp Name, Anual Salary, Department Name
+6. create synonym for q. no 4
+
+
+
+=================
+====Trigger======
+CREATE or REPLACE TRIGGER usa_after_insert AFTER INSERT ON usa
+FOR EACH ROW
+DECLARE
+BEGIN
+insert into usa_backup values (:new.usaid, :new.fname, :new.lname);
+DBMS_OUTPUT.PUT_LINE('Record successfully inserted into usa_backup table');
+END;
+=======
+
+insert into usa values(2,'Mr','Shohan');
+===============================
+select * from usa_backup;
+
+
+
+================
+CREATE or REPLACE TRIGGER usa_after_update
+AFTER UPDATE ON usa
+FOR EACH ROW
+DECLARE
+BEGIN
+update usa_backup
+set usaid = :new.usaid
+where usaid = :old.usaid;
+DBMS_OUTPUT.PUT_LINE('Record successfully updated into usa table');
+END;
+========================
+update usa set usaid=100
+where usaid=1;
+
+
+========================
+CREATE or REPLACE TRIGGER usa_after_delete
+AFTER DELETE ON usa
+FOR EACH ROW
+DECLARE
+BEGIN
+Delete usa_backup
+where usaid = :old.usaid;
+DBMS_OUTPUT.PUT_LINE('Record successfully Deleted from usa table');
+END;
+
+
+====================
+====Procedures======
+1. create a Table
+
+CREATE TABLE CUSTOMER ( 
+  id       NUMBER (5)  primary key, 
+  name      VARCHAR2 (20)  NOT NULL, 
+  mobile    VARCHAR2 (11)  NOT NULL, 
+  country  VARCHAR2(50) Default 'BD'
+  )
+
+
+2. Create a Stored Procedure
+
+A stored procedure, accept 4 IN parameters and insert it into table "CUSTOMER"
+
+CREATE OR REPLACE PROCEDURE insertCustomer(
+	   p_id IN CUSTOMER.id%TYPE,
+	   p_name IN CUSTOMER.name%TYPE,
+	   p_mobile IN CUSTOMER.mobile%TYPE,
+	   p_country IN CUSTOMER.country%TYPE)
+IS
+BEGIN
+  INSERT INTO CUSTOMER (id, name, mobile, country) 
+  VALUES (p_id, p_name,p_mobile, p_country);
+  COMMIT;
+END;
+/
+
+
+3. Calls from PL/SQL
+
+Call from PL/SQL like this :
+
+BEGIN
+   insertCustomer(100,'Mahbub','01686000000','USA');
+END;
+
+============================== Update Example=========================
+CREATE OR REPLACE PROCEDURE updateCustomer(
+	   p_id IN CUSTOMER.id%TYPE,
+	   p_name IN CUSTOMER.name%TYPE)
+IS
+BEGIN
+
+  update CUSTOMER set name=p_name where id=p_id;
+
+  COMMIT;
+
+END;
+/
+Call: 
+Begin
+updateCustomer(100, 'Mr. Mahbub');
+end;
+
+
+============================== Delete Example=========================
+CREATE OR REPLACE PROCEDURE deleteCustomer(
+	   p_id IN CUSTOMER.id%TYPE)
+IS
+BEGIN
+
+  delete from CUSTOMER where id=p_id;
+
+  COMMIT;
+
+END;
+/
+Call: 
+Begin
+deleteCustomer(100);
+end;
